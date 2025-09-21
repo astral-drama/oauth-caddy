@@ -1,0 +1,19 @@
+Package: oauth-caddy
+Version: 1.0.0
+Section: admin
+Priority: optional
+Architecture: all
+Depends: caddy, oauth2-proxy, openssl
+Maintainer: OAuth Caddy <security@oauth-caddy.dev>
+Description: OAuth2 authentication setup for Caddy reverse proxy
+ OAuth Caddy provides a complete OAuth2 authentication solution for Caddy
+ reverse proxy, supporting multiple providers including Google and GitHub.
+ .
+  * Pre-configured Caddy templates for OAuth2 flows
+  * oauth2-proxy integration with systemd services
+  * Easy setup script for quick deployment
+  * Support for Google and GitHub OAuth providers
+  * Template-based configuration for multiple environments
+ .
+ This package simplifies setting up OAuth2 authentication for web applications
+ behind a Caddy reverse proxy with automatic HTTPS and Let's Encrypt.

@@ -1,0 +1,24 @@
+#!/bin/bash
+# Post-installation script for oauth-caddy
+
+set -e
+
+echo "🔧 Configuring OAuth Caddy..."
+
+# Create oauth2-proxy templates directory
+mkdir -p /var/lib/oauth2-proxy/templates
+
+# Set permissions on configuration files
+chmod 644 /etc/caddy/Caddyfile.template
+chmod 644 /etc/oauth2-proxy/*.template
+chmod 755 /usr/local/bin/oauth-caddy-setup
+
+# Create caddy log directory if it doesn't exist
+mkdir -p /var/log/caddy
+chown caddy:caddy /var/log/caddy 2>/dev/null || chown www-data:www-data /var/log/caddy
+
+echo "✅ OAuth Caddy configured successfully!"
+echo "📝 Run 'oauth-caddy-setup --help' to see configuration options"
+echo "🔧 Example: oauth-caddy-setup --domain example.com --email admin@example.com"
+
+exit 0

@@ -1,0 +1,53 @@
+{
+	email YOUR_EMAIL@example.com
+}
+
+YOUR_DOMAIN.com {
+	log {
+		output file /var/log/caddy/access.log
+	}
+
+	# OAuth2 routes for Google (handled by oauth2-proxy on port 4180)
+	route /oauth2/google/* {
+		reverse_proxy localhost:4180
+	}
+
+	# OAuth2 routes for GitHub (handled by oauth2-proxy on port 4181)
+	route /oauth2/github/* {
+		reverse_proxy localhost:4181
+	}
+
+	# Handle generic /oauth2/* by routing to Google oauth2-proxy by default
+	route /oauth2/* {
+		reverse_proxy localhost:4180
+	}
+
+	# Login shortcuts
+	route /login/google {
+		redir /oauth2/start temporary
+	}
+
+	route /login/github {
+		redir /oauth2/github/start temporary
+	}
+
+	# Protected routes with Google auth
+	route /google/* {
+		reverse_proxy localhost:4180
+	}
+
+	# Protected routes with GitHub auth
+	route /github/* {
+		reverse_proxy localhost:4181
+	}
+
+	# Admin section with Google auth
+	route /admin/* {
+		reverse_proxy localhost:4180
+	}
+
+	# Public routes (no auth needed)
+	route /* {
+		reverse_proxy localhost:YOUR_BACKEND_PORT
+	}
+}

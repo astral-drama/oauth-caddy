@@ -1,0 +1,36 @@
+# GitHub OAuth Configuration
+http_address = "127.0.0.1:4181"
+upstreams = ["http://127.0.0.1:YOUR_BACKEND_PORT/"]
+
+# Cookie configuration
+cookie_secret = "GENERATE_32_CHAR_HEX_SECRET"
+cookie_secure = true
+cookie_httponly = true
+cookie_name = "_oauth2_proxy_github"
+cookie_expire = "168h"  # 7 days
+
+# GitHub OAuth settings
+provider = "github"
+client_id = "YOUR_GITHUB_CLIENT_ID"
+client_secret = "YOUR_GITHUB_CLIENT_SECRET"
+redirect_url = "https://YOUR_DOMAIN.com/oauth2/callback"
+
+# GitHub-specific settings
+github_org = ""  # Optional: restrict to specific GitHub org
+github_team = "" # Optional: restrict to specific team
+
+# Email restrictions
+email_domains = ["*"]
+
+# Logging
+request_logging = true
+auth_logging = true
+
+# Security
+skip_jwt_bearer_tokens = true
+skip_auth_strip_headers = false
+
+# Pass user info to backend
+pass_access_token = true
+pass_user_headers = true
+set_xauthrequest = true
