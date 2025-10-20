@@ -46,23 +46,21 @@ YOUR_DOMAIN.com {
 		reverse_proxy localhost:4180
 	}
 
-	# Good Neighbor service with Google auth (using forward_auth)
+	# Good Neighbor service with Google auth (NO prefix stripping)
 	route /good-neighbor/* {
 		forward_auth localhost:4180 {
 			uri /oauth2/auth
 			copy_headers X-Auth-Request-User X-Auth-Request-Email X-Auth-Request-Access-Token
 		}
-		uri strip_prefix /good-neighbor
 		reverse_proxy localhost:3000
 	}
 
-	# Service Monitor with Google auth (using forward_auth)
+	# Service Monitor with Google auth (NO prefix stripping)
 	route /service-monitor/* {
 		forward_auth localhost:4180 {
 			uri /oauth2/auth
 			copy_headers X-Auth-Request-User X-Auth-Request-Email X-Auth-Request-Access-Token
 		}
-		uri strip_prefix /service-monitor
 		reverse_proxy localhost:8000
 	}
 
