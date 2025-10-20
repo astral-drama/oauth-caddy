@@ -52,6 +52,7 @@ YOUR_DOMAIN.com {
 			uri /oauth2/auth
 			copy_headers X-Auth-Request-User X-Auth-Request-Email X-Auth-Request-Access-Token
 		}
+		uri strip_prefix /good-neighbor
 		reverse_proxy localhost:3000
 	}
 
@@ -61,6 +62,7 @@ YOUR_DOMAIN.com {
 			uri /oauth2/auth
 			copy_headers X-Auth-Request-User X-Auth-Request-Email X-Auth-Request-Access-Token
 		}
+		uri strip_prefix /service-monitor
 		reverse_proxy localhost:8000
 	}
 
