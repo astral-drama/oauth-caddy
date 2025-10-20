@@ -12,6 +12,7 @@ mkdir -p /var/lib/oauth2-proxy/templates
 chmod 644 /etc/caddy/Caddyfile.template
 chmod 644 /etc/oauth2-proxy/*.template
 chmod 755 /usr/local/bin/oauth-caddy-setup
+chmod 755 /usr/bin/oauth2-proxy
 
 # Create caddy log directory if it doesn't exist
 mkdir -p /var/log/caddy

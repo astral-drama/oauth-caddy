@@ -13,7 +13,7 @@ cookie_expire = "168h"  # 7 days
 provider = "google"
 client_id = "YOUR_GOOGLE_CLIENT_ID"
 client_secret = "YOUR_GOOGLE_CLIENT_SECRET"
-redirect_url = "https://YOUR_DOMAIN.com/oauth2/callback"
+redirect_url = "https://YOUR_DOMAIN.com/good-neighbor/oauth2/callback"
 
 # Email restrictions (optional - set to your domain or "*" for any)
 email_domains = ["*"]
