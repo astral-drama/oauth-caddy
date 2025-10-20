@@ -46,6 +46,16 @@ YOUR_DOMAIN.com {
 		reverse_proxy localhost:4180
 	}
 
+	# Good Neighbor service with Google auth
+	route /good-neighbor/* {
+		reverse_proxy localhost:4182
+	}
+
+	# Service Monitor with Google auth
+	route /service-monitor/* {
+		reverse_proxy localhost:4183
+	}
+
 	# Public routes (no auth needed)
 	route /* {
 		reverse_proxy localhost:YOUR_BACKEND_PORT

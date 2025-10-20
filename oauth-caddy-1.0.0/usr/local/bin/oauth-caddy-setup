@@ -127,6 +127,26 @@ else
     echo -e "${YELLOW}Skipping GitHub OAuth (credentials not provided)${NC}"
 fi
 
+# Configure Good Neighbor service with Google OAuth
+if [ ! -z "$GOOGLE_CLIENT_ID" ] && [ ! -z "$GOOGLE_SECRET" ]; then
+    echo -e "${YELLOW}Configuring Good Neighbor service (OAuth via Google)...${NC}"
+    sed -e "s/GENERATE_32_CHAR_HEX_SECRET/$COOKIE_SECRET/g" \
+        -e "s/YOUR_GOOGLE_CLIENT_ID/$GOOGLE_CLIENT_ID/g" \
+        -e "s/YOUR_GOOGLE_CLIENT_SECRET/$GOOGLE_SECRET/g" \
+        -e "s/YOUR_DOMAIN.com/$DOMAIN/g" \
+        /etc/oauth2-proxy/good-neighbor.cfg.template > /etc/oauth2-proxy/good-neighbor.cfg
+fi
+
+# Configure Service Monitor with Google OAuth
+if [ ! -z "$GOOGLE_CLIENT_ID" ] && [ ! -z "$GOOGLE_SECRET" ]; then
+    echo -e "${YELLOW}Configuring Service Monitor (OAuth via Google)...${NC}"
+    sed -e "s/GENERATE_32_CHAR_HEX_SECRET/$COOKIE_SECRET/g" \
+        -e "s/YOUR_GOOGLE_CLIENT_ID/$GOOGLE_CLIENT_ID/g" \
+        -e "s/YOUR_GOOGLE_CLIENT_SECRET/$GOOGLE_SECRET/g" \
+        -e "s/YOUR_DOMAIN.com/$DOMAIN/g" \
+        /etc/oauth2-proxy/service-monitor.cfg.template > /etc/oauth2-proxy/service-monitor.cfg
+fi
+
 # Create systemd services for oauth2-proxy
 echo -e "${YELLOW}Creating systemd services...${NC}"
 
@@ -141,7 +161,7 @@ After=network.target
 Type=simple
 User=www-data
 Group=www-data
-ExecStart=/usr/local/bin/oauth2-proxy --config=/etc/oauth2-proxy/google.cfg
+ExecStart=/usr/bin/oauth2-proxy --config=/etc/oauth2-proxy/google.cfg
 Restart=always
 RestartSec=5
 
@@ -161,7 +181,47 @@ After=network.target
 Type=simple
 User=www-data
 Group=www-data
-ExecStart=/usr/local/bin/oauth2-proxy --config=/etc/oauth2-proxy/github.cfg
+ExecStart=/usr/bin/oauth2-proxy --config=/etc/oauth2-proxy/github.cfg
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+fi
+
+# Good Neighbor service
+if [ -f "/etc/oauth2-proxy/good-neighbor.cfg" ]; then
+    cat > /etc/systemd/system/oauth2-proxy-good-neighbor.service << EOF
+[Unit]
+Description=OAuth2 Proxy for Good Neighbor Service
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+ExecStart=/usr/bin/oauth2-proxy --config=/etc/oauth2-proxy/good-neighbor.cfg
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+fi
+
+# Service Monitor service
+if [ -f "/etc/oauth2-proxy/service-monitor.cfg" ]; then
+    cat > /etc/systemd/system/oauth2-proxy-service-monitor.service << EOF
+[Unit]
+Description=OAuth2 Proxy for Service Monitor
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+ExecStart=/usr/bin/oauth2-proxy --config=/etc/oauth2-proxy/service-monitor.cfg
 Restart=always
 RestartSec=5
 
@@ -183,6 +243,18 @@ if [ -f "/etc/systemd/system/oauth2-proxy-github.service" ]; then
     systemctl enable oauth2-proxy-github
     systemctl start oauth2-proxy-github
     echo -e "${GREEN}✓ GitHub OAuth2 proxy enabled and started${NC}"
+fi
+
+if [ -f "/etc/systemd/system/oauth2-proxy-good-neighbor.service" ]; then
+    systemctl enable oauth2-proxy-good-neighbor
+    systemctl start oauth2-proxy-good-neighbor
+    echo -e "${GREEN}✓ Good Neighbor OAuth2 proxy enabled and started${NC}"
+fi
+
+if [ -f "/etc/systemd/system/oauth2-proxy-service-monitor.service" ]; then
+    systemctl enable oauth2-proxy-service-monitor
+    systemctl start oauth2-proxy-service-monitor
+    echo -e "${GREEN}✓ Service Monitor OAuth2 proxy enabled and started${NC}"
 fi
 
 # Restart Caddy

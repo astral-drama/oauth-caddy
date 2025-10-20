@@ -1,0 +1,38 @@
+# Good Neighbor Service OAuth Configuration
+http_address = "127.0.0.1:4182"
+upstreams = ["http://127.0.0.1:3000/"]
+
+# Cookie configuration
+cookie_secret = "GENERATE_32_CHAR_HEX_SECRET"
+cookie_secure = true
+cookie_httponly = true
+cookie_name = "_oauth2_proxy_good_neighbor"
+cookie_expire = "168h"  # 7 days
+
+# Google OAuth settings
+provider = "google"
+client_id = "YOUR_GOOGLE_CLIENT_ID"
+client_secret = "YOUR_GOOGLE_CLIENT_SECRET"
+redirect_url = "https://YOUR_DOMAIN.com/oauth2/callback"
+
+# Email restrictions (optional - set to your domain or "*" for any)
+email_domains = ["*"]
+# email_domains = ["yourdomain.com"]
+
+# Logging
+request_logging = true
+auth_logging = true
+
+# Security
+skip_jwt_bearer_tokens = true
+skip_auth_strip_headers = false
+
+# Pass user info to backend
+pass_access_token = true
+pass_user_headers = true
+set_xauthrequest = true
+
+# Custom error page handling
+custom_templates_dir = "/var/lib/oauth2-proxy/templates"
+banner = "Please sign in with Google"
+footer = "Unauthorized access"
