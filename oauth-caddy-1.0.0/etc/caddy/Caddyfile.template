@@ -47,7 +47,7 @@ YOUR_DOMAIN.com {
 	}
 
 	# Good Neighbor service with Google auth (NO prefix stripping)
-	route /good-neighbor/* {
+	route /good-neighbor* {
 		forward_auth localhost:4180 {
 			uri /oauth2/auth
 			copy_headers X-Auth-Request-User X-Auth-Request-Email X-Auth-Request-Access-Token
@@ -56,7 +56,7 @@ YOUR_DOMAIN.com {
 	}
 
 	# Service Monitor with Google auth (NO prefix stripping)
-	route /service-monitor/* {
+	route /service-monitor* {
 		forward_auth localhost:4180 {
 			uri /oauth2/auth
 			copy_headers X-Auth-Request-User X-Auth-Request-Email X-Auth-Request-Access-Token
